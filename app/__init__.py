@@ -36,6 +36,10 @@ def main():
                     if board[pos][y] == "X":
                         # right move
                         board[x][y] = "X"
+                        temp = x + 1
+                        while board[temp][y] == "O":
+                            board[temp][y] = "X"
+                            temp +=1
                         show_board(board)
                         break
             elif board[x][y-1] == "O":
@@ -45,6 +49,10 @@ def main():
                     if board[x][pos] == "X":
                         # right move
                         board[x][y] = "X"
+                        temp = y - 1
+                        while board[x][temp] == "O":
+                            board[x][temp] = "X"
+                            temp -=1
                         show_board(board)
                         break
             elif board[x][y+1] == "O":
@@ -54,6 +62,10 @@ def main():
                     if board[x][pos] == "X":
                         # right move
                         board[x][y] = "X"
+                        temp = y + 1
+                        while board[x][temp] == "O":
+                            board[x][temp] = "X"
+                            temp +=1
                         show_board(board)
                         break
             elif board[x-1][y-1] == "O":
@@ -65,6 +77,12 @@ def main():
                     if board[pos1][pos] == "X":
                         # right move
                         board[x][y] = "X"
+                        temp = x - 1
+                        temp1 = y-1
+                        while board[temp][temp1] == "O":
+                            board[temp][temp1] = "X"
+                            temp -=1
+                            temp1 -=1
                         show_board(board)
                         break
             elif board[x+1][y+1] == "O":
@@ -76,6 +94,13 @@ def main():
                     if board[pos1][pos] == "X":
                         # right move
                         board[x][y] = "X"
+                        temp = x + 1
+                        temp1 = y+1
+                        while board[temp][temp1] == "O":
+                            board[temp][temp1] = "X"
+                            temp +=1
+                            temp1 +=1
+
                         show_board(board)
                         break
             else:
