@@ -1,21 +1,15 @@
 from app.board import *
+from app.helpers import *
 
 board = initialize_board()
 
 
 def main():
-    ans = ''
-    while str(ans).lower() != 'y' or str(ans).lower() != 'n':
-        ans = input("Do you want to play first? [Y/N] ")
-        if str(ans).lower() == 'y' or str(ans).lower() == 'n':
-            break
+    
+    first_player = who_plays_first()
 
-    if ans == "Y" or ans == "y":
-        FirstPlayer = 'human'
-    else:
-        FirstPlayer = 'ai'
+    if first_player == 'human':
 
-    if FirstPlayer == 'human':
         ans = input("Where do you want to put your tile? [X,Y] ")
         x = int(str(ans).split(',')[0])
         y = int(str(ans).split(',')[1])
