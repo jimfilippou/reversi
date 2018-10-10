@@ -1,20 +1,4 @@
-from app.board import *
-from app.helpers import *
-
-board = initialize_board()
-
-
-def main():
-    
-    first_player = who_plays_first()
-    show_board(board)
-    if first_player == 'human':
-       
-        ans = input("\nWhere do you want to put your tile? [X,Y] ")
-        x = int(str(ans).split(',')[0])
-        y = int(str(ans).split(',')[1])
-
-        if board[x][y] == "-":
+ if board[x][y] == "-":
             if board[x-1][y] == "O":
                 pos = x-1
                 while board[pos][y] == "O":
@@ -103,50 +87,5 @@ def main():
 
                         show_board(board)
                         break
-            elif board[x-1][y+1] == "O":
-                pos = y + 1
-                pos1 = x-1
-                while board[pos1][pos] == "O":
-                    pos += 1
-                    pos1 -= 1
-                    if board[pos1][pos] == "X":
-                        # right move
-                        board[x][y] = "X"
-                        temp = x - 1
-                        temp1 = y+1
-                        while board[temp][temp1] == "O":
-                            board[temp][temp1] = "X"
-                            temp -=1
-                            temp1 +=1
-
-                        show_board(board)
-                        break
-
-            elif board[x+1][y-1] == "O":
-                pos = y - 1
-                pos1 = x+1
-                while board[pos1][pos] == "O":
-                    pos -= 1
-                    pos1 += 1
-                    if board[pos1][pos] == "X":
-                        # right move
-                        board[x][y] = "X"
-                        temp = x + 1
-                        temp1 = y-1
-                        while board[temp][temp1] == "O":
-                            board[temp][temp1] = "X"
-                            temp +=1
-                            temp1 -=1
-
-                        show_board(board)
-                        break            
             else:
-                print("You can't put your tile here!Please choose another position.")            
-                                        
-
-                                       
-                            
-        else:
-            print("You can't put your tile here!Please choose another position.")              
-
-                
+                print("You can't put your tile here!Please choose another position.")
