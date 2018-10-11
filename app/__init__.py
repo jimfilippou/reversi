@@ -1,163 +1,37 @@
 from app.board import *
 from app.helpers import *
+import time
 
 board = initialize_board()
 
 
+def get_y_from_letter(letter):
+    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+    return letters.index(letter) + 1
+
+
 def main():
-    
-    first_player = who_plays_first()
-    show_board(board)
-    if first_player == 'human':
-       
-        ans = input("\nWhere do you want to put your tile? [X,Y] ")
-        x = int(str(ans).split(',')[0])
-        y = int(str(ans).split(',')[1])
 
-        move = "false"
+    run = True
+    player = who_plays_first() # Αρχικοποίηση για το ποιός παίζει πρώτος. 
 
-        if board[x][y] == "-":
-
-            if board[x-1][y] == "O":
-                pos = x-1
-                while board[pos][y] == "O":
-                    pos -= 1
-                    if board[pos][y] == "X":
-                        # right move
-                        board[x][y] = "X"
-                        temp = x - 1
-                        while board[temp][y] == "O":
-                            board[temp][y] = "X"
-                            temp -=1
-                        move = "true"
-                        show_board(board)
-                        break
-            if board[x+1][y] == "O":
-                pos = x+1
-                while board[pos][y] == "O":
-                    pos += 1
-                    if board[pos][y] == "X":
-                        # right move
-                        board[x][y] = "X"
-                        temp = x + 1
-                        while board[temp][y] == "O":
-                            board[temp][y] = "X"
-                            temp +=1
-                            move = "true"
-                        show_board(board)
-                        break
-            if board[x][y-1] == "O":
-                pos = y-1
-                while board[x][pos] == "O":
-                    pos -= 1
-                    if board[x][pos] == "X":
-                        # right move
-                        board[x][y] = "X"
-                        temp = y - 1
-                        while board[x][temp] == "O":
-                            board[x][temp] = "X"
-                            temp -=1
-                            move = "true"
-                        show_board(board)
-                        break
-            if board[x][y+1] == "O":
-                pos = y+1
-                while board[x][pos] == "O":
-                    pos += 1
-                    if board[x][pos] == "X":
-                        # right move
-                        board[x][y] = "X"
-                        temp = y + 1
-                        while board[x][temp] == "O":
-                            board[x][temp] = "X"
-                            temp +=1
-                            move = "true"
-                        show_board(board)
-                        break
-            if board[x-1][y-1] == "O":
-                pos = y - 1
-                pos1 = x-1
-                while board[pos1][pos] == "O":
-                    pos -= 1
-                    pos1 -= 1
-                    if board[pos1][pos] == "X":
-                        # right move
-                        board[x][y] = "X"
-                        temp = x - 1
-                        temp1 = y-1
-                        while board[temp][temp1] == "O":
-                            board[temp][temp1] = "X"
-                            temp -=1
-                            temp1 -=1
-                            move = "true"
-                        show_board(board)
-                        break
-            if board[x+1][y+1] == "O":
-                pos = y + 1
-                pos1 = x+1
-                while board[pos1][pos] == "O":
-                    pos += 1
-                    pos1 += 1
-                    if board[pos1][pos] == "X":
-                        # right move 
-                        board[x][y] = "X"
-                        temp = x + 1
-                        temp1 = y+1
-                        while board[temp][temp1] == "O":
-                            board[temp][temp1] = "X"
-                            temp +=1
-                            temp1 +=1
-                            move = "true"
-
-                        show_board(board)
-                        break
-            if board[x-1][y+1] == "O":
-                pos = y + 1
-                pos1 = x-1
-                while board[pos1][pos] == "O":
-                    pos += 1
-                    pos1 -= 1
-                    if board[pos1][pos] == "X":
-                        # right move
-                        board[x][y] = "X"
-                        temp = x - 1
-                        temp1 = y+1
-                        while board[temp][temp1] == "O":
-                            board[temp][temp1] = "X"
-                            temp -=1
-                            temp1 +=1
-                            move = "true"
-
-                        show_board(board)
-                        break
-
-            if board[x+1][y-1] == "O":
-                pos = y - 1
-                pos1 = x+1
-                while board[pos1][pos] == "O":
-                    pos -= 1
-                    pos1 += 1
-                    if board[pos1][pos] == "X":
-                        # right move
-                        board[x][y] = "X"
-                        temp = x + 1
-                        temp1 = y-1
-                        while board[temp][temp1] == "O":
-                            board[temp][temp1] = "X"
-                            temp +=1
-                            temp1 -=1
-                            move = "true"
-
-                        show_board(board)
-                        break            
-            if move == "false":
-                print("You can't put your tile here!Please choose another position.")            
-                                        
-
-                                       
-                            
+    while run:
+        show_board(board)
+        if player == 'human':
+            ans = input("\nWhere do you want to put your tile? [X,Y] ")
+            if ans == 'break':
+                break
+            x = int(str(ans).split(',')[0])
+            y = get_y_from_letter(str(ans).split(',')[1])
+            
+            should_move = pickPos(x, y, board)
+            
+            if should_move == 'true':
+                player = 'ai'
+            else:
+                print("\nYou can't put your tile here!Choose another position.")
         else:
-            print("You can't put your tile here!Please choose another position.")              
-
-                
-   
+            # AI move
+            print('\nAi is thinkging....')
+            time.sleep(3)
+            player = 'human'

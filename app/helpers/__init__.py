@@ -1,3 +1,5 @@
+from .position import pickPos
+
 def who_plays_first():
     """
     Asks user if he/she wants to play first.
