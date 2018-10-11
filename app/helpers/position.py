@@ -17,21 +17,11 @@ def pickPos(x, y, board, who):
                 pos = pos - 1 if s == 'up' or s == 'left' else pos + 1
                 axis = board[pos][y] if s == 'up' or s == 'down' else board[x][pos]
                 if axis == "X" if human else "O":
-                    # right move
-                    board[x][y] = "X" if human else "O"
-                    temp = x - 1 if s == 'up' else x + \
-                        1 if s == 'down' else y - 1 if s == 'left' else y + 1
-                    condition = board[temp][y] if s == 'up' or s == 'down' else board[x][temp]
-                    while condition == "O" if human else "X":
-                        if s == 'up' or s == 'down':
-                            board[temp][y] = "X" if human else "O"
-                        else:
-                            board[x][temp] = "X" if human else "O"
-                        temp = temp - 1 if s == 'up' or s == 'left' else temp + 1
-                        move = True
-                        condition = board[temp][y] if s == 'up' or s == 'down' else board[x][temp]
-                    break
+                    board[x][y] = "X" if human else "O" # Player did a valid move, flip current tile
+                    # Now flip tiles in between and return if at least one was flipped
+                    return flip_tiles(x, y, board, human, s)  
 
+        #  Look NorthWest SouthWest NorthEast SouthEast for moves and execute moves
 
         if board[x-1][y-1] == "O":
             pos = y - 1
@@ -86,7 +76,6 @@ def pickPos(x, y, board, who):
                         temp1 += 1
                         move = True
                     break
-
         if board[x+1][y-1] == "O":
             pos = y - 1
             pos1 = x+1
@@ -107,4 +96,21 @@ def pickPos(x, y, board, who):
                     break
         return move
     else:
-        return move
+        return False
+
+
+def flip_tiles(x, y, board, human, s):
+    response = False
+    temp = x - 1 if s == 'up' else x + \
+        1 if s == 'down' else y - 1 if s == 'left' else y + 1
+    condition = board[temp][y] if s == 'up' or s == 'down' else board[x][temp]
+    while condition == "O" if human else "X":
+            if s == 'up' or s == 'down':
+                board[temp][y] = "X" if human else "O"
+            else:
+                board[x][temp] = "X" if human else "O"
+            temp = temp - 1 if s == 'up' or s == 'left' else temp + 1
+            if not response:
+                response = True
+            condition = board[temp][y] if s == 'up' or s == 'down' else board[x][temp]
+    return response
