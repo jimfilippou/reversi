@@ -1,67 +1,38 @@
 from app.board import show_board
 
+
 def pickPos(x, y, board, who):
-    
-    move = "false"
+
+    move = False
+    human = who == 'human'
 
     if board[x][y] == "-":
 
-        if board[x-1][y] == "O":
-            pos = x-1
-            while board[pos][y] == "O":
-                pos -= 1
-                if board[pos][y] == "X":
+        # Look up down left and right for moves and execute moves
+        for s in ['up', 'down', 'left', 'right']:
+            pos = x - 1 if s == 'up' else x + \
+                1 if s == 'down' else y - 1 if s == 'left' else y + 1
+            axis = board[pos][y] if s == 'up' or s == 'down' else board[x][pos]
+            while axis == "O" if human else "X":
+                pos = pos - 1 if s == 'up' or s == 'left' else pos + 1
+                axis = board[pos][y] if s == 'up' or s == 'down' else board[x][pos]
+                if axis == "X" if human else "O":
                     # right move
-                    board[x][y] = "X"
-                    temp = x - 1
-                    while board[temp][y] == "O":
-                        board[temp][y] = "X"
-                        temp -= 1
-                    move = "true"
-                    
+                    board[x][y] = "X" if human else "O"
+                    temp = x - 1 if s == 'up' else x + \
+                        1 if s == 'down' else y - 1 if s == 'left' else y + 1
+                    condition = board[temp][y] if s == 'up' or s == 'down' else board[x][temp]
+                    while condition == "O" if human else "X":
+                        if s == 'up' or s == 'down':
+                            board[temp][y] = "X" if human else "O"
+                        else:
+                            board[x][temp] = "X" if human else "O"
+                        temp = temp - 1 if s == 'up' or s == 'left' else temp + 1
+                        move = True
+                        condition = board[temp][y] if s == 'up' or s == 'down' else board[x][temp]
                     break
-        if board[x+1][y] == "O":
-            pos = x+1
-            while board[pos][y] == "O":
-                pos += 1
-                if board[pos][y] == "X":
-                    # right move
-                    board[x][y] = "X"
-                    temp = x + 1
-                    while board[temp][y] == "O":
-                        board[temp][y] = "X"
-                        temp += 1
-                        move = "true"
-                    
-                    break
-        if board[x][y-1] == "O":
-            pos = y-1
-            while board[x][pos] == "O":
-                pos -= 1
-                if board[x][pos] == "X":
-                    # right move
-                    board[x][y] = "X"
-                    temp = y - 1
-                    while board[x][temp] == "O":
-                        board[x][temp] = "X"
-                        temp -= 1
-                        move = "true"
-                    
-                    break
-        if board[x][y+1] == "O":
-            pos = y+1
-            while board[x][pos] == "O":
-                pos += 1
-                if board[x][pos] == "X":
-                    # right move
-                    board[x][y] = "X"
-                    temp = y + 1
-                    while board[x][temp] == "O":
-                        board[x][temp] = "X"
-                        temp += 1
-                        move = "true"
-                    
-                    break
+
+
         if board[x-1][y-1] == "O":
             pos = y - 1
             pos1 = x-1
@@ -77,8 +48,8 @@ def pickPos(x, y, board, who):
                         board[temp][temp1] = "X"
                         temp -= 1
                         temp1 -= 1
-                        move = "true"
-                    
+                        move = True
+
                     break
         if board[x+1][y+1] == "O":
             pos = y + 1
@@ -95,9 +66,8 @@ def pickPos(x, y, board, who):
                         board[temp][temp1] = "X"
                         temp += 1
                         temp1 += 1
-                        move = "true"
+                        move = True
 
-                    
                     break
         if board[x-1][y+1] == "O":
             pos = y + 1
@@ -114,10 +84,9 @@ def pickPos(x, y, board, who):
                         board[temp][temp1] = "X"
                         temp -= 1
                         temp1 += 1
-                        move = "true"
-
-                    
+                        move = True
                     break
+
         if board[x+1][y-1] == "O":
             pos = y - 1
             pos1 = x+1
@@ -133,9 +102,8 @@ def pickPos(x, y, board, who):
                         board[temp][temp1] = "X"
                         temp += 1
                         temp1 -= 1
-                        move = "true"
+                        move = True
 
-                    
                     break
         return move
     else:
