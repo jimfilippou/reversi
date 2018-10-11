@@ -5,12 +5,15 @@ import time
 board = initialize_board()
 
 # Letter to coordinate (ltc)
-ltc = lambda x: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].index(x) + 1
+
+
+def ltc(x): return ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].index(x) + 1
+
 
 def main():
 
     run = True
-    player = who_plays_first() # Αρχικοποίηση για το ποιός παίζει πρώτος. 
+    player = who_plays_first()  # Αρχικοποίηση για το ποιός παίζει πρώτος.
 
     while run:
         show_board(board)
@@ -20,9 +23,9 @@ def main():
                 break
             x = int(str(ans).split(',')[0])
             y = ltc(str(ans).split(',')[1])
-            
+
             should_move = pickPos(x, y, board, 'human')
-            
+
             if should_move:
                 player = 'ai'
             else:
@@ -30,5 +33,11 @@ def main():
         else:
             # AI move
             print('\nAi is thinkging....')
-            time.sleep(3)
-            player = 'human'
+            time.sleep(1)
+            for i in range(8):
+                for j in range(8):
+                    print(i+1, j+1)
+                    should_move = pickPos(i+1, j+1, board, 'ai')
+                    if should_move:
+                        player = 'human'
+                        break
