@@ -46,8 +46,8 @@ def pickPos(x, y, board, who):
                         board[pos_x, pos_y] = "X" if human else "O" # !WARNING may produce error
                         # Now flip tiles
                         return flip_tiles(pos_x, pos_y, board, s)
-                elif tile == '-':
-                    return False
+                    elif tile == '-':
+                        return False
 
             # while board(pos_x, pos_y)
 
