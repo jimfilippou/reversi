@@ -17,7 +17,7 @@ def pickPos(x, y, board, who):
             except IndexError:
                 return False
             if (axis == "O" or axis == "X") and not (axis == "X" and human or axis == "O" and not human):
-            
+
                 while axis == "O" if human else "X":
                     pos = pos - 1 if s == 'up' or s == 'left' else pos + 1
                     axis = board[pos][y] if s == 'up' or s == 'down' else board[x][pos]
@@ -30,13 +30,29 @@ def pickPos(x, y, board, who):
                         return False
 
         #  Look NorthWest SouthWest NorthEast SouthEast for moves and execute moves
+        for s in ['ul', 'ur', 'dl', 'dr']:
+            pos_y = y - 1 if s == 'ul' or s == 'ur' else y + 1
+            pos_x = x - 1 if s == 'ul' or s == 'dl' else x + 1
+            try:
+                tile = board[pos_x, pos_y]
+            except IndexError:
+                return False
+            if (tile == "O" or tile == "X") and not (tile == "X" and human or tile == "O" and not human):
+                while tile == "O" if human else "X":
+                    pos_y = pos_y - 1 if s == 'ul' or s == 'ur' else pos_y + 1
+                    pos_x = pos_x - 1 if s == 'ul' or s == 'dl' else pos_x + 1
+                    if human and tile == "X" or not human and tile == "O":
+                        # Player did balid move
+                        board[pos_x, pos_y] = "X" if human else "O" # !WARNING may produce error
+                        # Now flip tiles
+                        return flip_tiles(pos_x, pos_y, board, s)
+                elif tile == '-':
+                    return False
 
-        # if board[x-1][y-1] == "O":
-        #     pos = y - 1
-        #     pos1 = x-1
-        #     while board[pos1][pos] == "O":
-        #         pos -= 1
-        #         pos1 -= 1
+            # while board(pos_x, pos_y)
+
+# UP LEFT
+
         #         if board[pos1][pos] == "X":
         #             # right move
         #             board[x][y] = "X"
@@ -49,12 +65,9 @@ def pickPos(x, y, board, who):
         #                 move = True
 
         #             break
-        # if board[x+1][y+1] == "O":
-        #     pos = y + 1
-        #     pos1 = x+1
-        #     while board[pos1][pos] == "O":
-        #         pos += 1
-        #         pos1 += 1
+
+        #  DOWN RIGHT
+
         #         if board[pos1][pos] == "X":
         #             # right move
         #             board[x][y] = "X"
@@ -67,12 +80,8 @@ def pickPos(x, y, board, who):
         #                 move = True
 
         #             break
-        # if board[x-1][y+1] == "O":
-        #     pos = y + 1
-        #     pos1 = x-1
-        #     while board[pos1][pos] == "O":
-        #         pos += 1
-        #         pos1 -= 1
+        # DOWN LEFT
+
         #         if board[pos1][pos] == "X":
         #             # right move
         #             board[x][y] = "X"
@@ -84,12 +93,9 @@ def pickPos(x, y, board, who):
         #                 temp1 += 1
         #                 move = True
         #             break
-        # if board[x+1][y-1] == "O":
-            # pos = y - 1
-            # pos1 = x+1
-            # while board[pos1][pos] == "O":
-            #     pos -= 1
-            #     pos1 += 1
+
+        # UP RIGHT
+
             #     if board[pos1][pos] == "X":
             #         # right move
             #         board[x][y] = "X"
@@ -106,8 +112,13 @@ def pickPos(x, y, board, who):
     else:
         return False
 
+def flip_tiles_diagonally(x, y, board, s):
+    pass
 
 def flip_tiles(x, y, board, human, s):
+    """
+    DOES NOT WORK FOR DIAGONIA
+    """
     response = False
     temp = x - 1 if s == 'up' else x + \
         1 if s == 'down' else y - 1 if s == 'left' else y + 1
