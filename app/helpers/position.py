@@ -34,7 +34,7 @@ def pickPos(x, y, board, who):
             pos_y = y - 1 if s == 'ul' or s == 'ur' else y + 1
             pos_x = x - 1 if s == 'ul' or s == 'dl' else x + 1
             try:
-                tile = board[pos_x, pos_y]
+                tile = board[pos_x, pos_y] # !νομιζω κατι εχεις ξαχασει εδω με βαση την ιδια απο πανω!!!!!!!!!!!!!!!!!!!!
             except IndexError:
                 return False
             if (tile == "O" or tile == "X") and not (tile == "X" and human or tile == "O" and not human):
@@ -45,7 +45,7 @@ def pickPos(x, y, board, who):
                         # Player did balid move
                         board[pos_x, pos_y] = "X" if human else "O" # !WARNING may produce error
                         # Now flip tiles
-                        return flip_tiles(pos_x, pos_y, board, s)
+                        return flip_tiles_diagonally(pos_x, pos_y, board, s)
                     elif tile == '-':
                         return False
 
@@ -112,8 +112,17 @@ def pickPos(x, y, board, who):
     else:
         return False
 
-def flip_tiles_diagonally(x, y, board, s):
-    pass
+#def flip_tiles_diagonally(x, y, board, s):
+   # response =False
+    #temp_x = x - 1 if s == 'ul' or s == 'dl' else x + 1
+    #temp_y = y - 1 if s == 'ul' or s == 'ur' else y + 1
+    #condition = board[temp_x][temp_y] 
+    #while (human and condition == "O") or (not human and condition == "X"):
+        #board[temp_x][temp_y] = "X" if human else "O"
+        #if not response:
+            #response = True
+        #condition = board[temp_x][temp_y]
+    #return response
 
 def flip_tiles(x, y, board, human, s):
     """
