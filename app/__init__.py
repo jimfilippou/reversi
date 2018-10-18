@@ -1,6 +1,6 @@
 from app.board import *
 from app.helpers import *
-import time
+import time, os
 
 board = initialize_board()
 
@@ -14,9 +14,9 @@ def main():
 
     run = True
     player = who_plays_first()  # Αρχικοποίηση για το ποιός παίζει πρώτος.
+    show_board(board)
 
     while run:
-        show_board(board)
         if player == 'human':
             ans = input("\nWhere do you want to put your tile? [X,Y] ")
             if ans == 'break':
@@ -28,11 +28,14 @@ def main():
 
             if should_move:
                 player = 'ai'
+                # os.system('cls')
+                show_board(board)
             else:
                 print("\nYou can't put your tile here!Choose another position.")
         else:
             # AI move
-            print('\nAi is thinkging....')
+            done = False
+            print('\nThinking....')
             time.sleep(1)
             for i in range(8):
                 for j in range(8):
@@ -40,4 +43,10 @@ def main():
                     should_move = pickPos(i+1, j+1, board, 'ai')
                     if should_move:
                         player = 'human'
+                        done = True
                         break
+                if done:
+                    break
+            # os.system('cls')
+            show_board(board)
+
