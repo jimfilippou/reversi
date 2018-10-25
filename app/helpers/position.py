@@ -1,9 +1,18 @@
 from app.board import show_board
 
 
+class Actions:
+    def __init__(self, x, y, moves):
+        self.x = x
+        self.y = y
+        self.moves = moves
+
+
 def pickPos(x, y, board, who):
 
-    move = False
+    actions = Actions(x, y, 0)
+
+    # ok = False
     human = who == 'human'
 
     if board[x][y] == "-":
@@ -15,19 +24,22 @@ def pickPos(x, y, board, who):
             try:
                 axis = board[pos][y] if s == 'up' or s == 'down' else board[x][pos]
             except IndexError:
-                return False
+                continue
             if (axis == "O" or axis == "X") and not (axis == "X" and human or axis == "O" and not human):
-
                 while axis == "O" if human else "X":
                     pos = pos - 1 if s == 'up' or s == 'left' else pos + 1
-                    axis = board[pos][y] if s == 'up' or s == 'down' else board[x][pos]
+                    try:
+                        axis = board[pos][y] if s == 'up' or s == 'down' else board[x][pos]
+                    except IndexError:
+                        continue
                     if human and axis == "X" or not human and axis == "O":
                         # Player did a valid move, flip current tile
                         board[x][y] = "X" if human else "O"
+                        actions.moves += 1
                         # Now flip tiles in between and return if at least one was flipped
-                        return flip_tiles(x, y, board, human, s)
+                        flip_tiles(x, y, board, human, s)
                     elif axis == "-":
-                        return False
+                        break
 
         #  Look NorthWest SouthWest NorthEast SouthEast for moves and execute moves
         for s in ['ul', 'ur', 'dl', 'dr']:
@@ -46,7 +58,7 @@ def pickPos(x, y, board, who):
             try:
                 tile = board[pos_x][pos_y]
             except IndexError:
-                return False
+                continue
             if (tile == "O" or tile == "X") and not (tile == "X" and human or tile == "O" and not human):
                 while tile == "O" if human else "X":
                     if s == 'ul':
@@ -61,16 +73,19 @@ def pickPos(x, y, board, who):
                     elif s == 'dr':
                         pos_y += 1
                         pos_x += 1
-                    tile = board[pos_x][pos_y]
+                    try:
+                        tile = board[pos_x][pos_y]
+                    except IndexError as err:
+                        continue
                     if human and tile == "X" or not human and tile == "O":
-                        #? Player did a valid move here
+                        # ? Player did a valid move here
                         board[x][y] = "X" if human else "O"
-                        return flip_tiles_diagonally(x, y, board, human, s)
+                        flip_tiles_diagonally(x, y, board, human, s)
+                        actions.moves += 1
                     elif tile == '-':
-                        return False
-        return move
-    else:
-        return False
+                        break  # ! break ?
+
+        return actions.moves > 0
 
 
 def flip_tiles_diagonally(x, y, board, human, s):

@@ -1,6 +1,7 @@
 from app.board import *
 from app.helpers import *
-import time, os
+import time
+import os
 
 board = initialize_board()
 
@@ -21,8 +22,13 @@ def main():
             ans = input("\nWhere do you want to put your tile? [X,Y] ")
             if ans == 'break':
                 break
-            x = int(str(ans).split(',')[0])
-            y = ltc(str(ans).split(',')[1])
+
+            try:
+                x = int(str(ans).split(',')[0])
+                y = ltc(str(ans).split(',')[1])
+            except ValueError as err:
+                print('Please provide a proper coordinate.')
+                continue
 
             should_move = pickPos(x, y, board, 'human')
 
@@ -49,4 +55,3 @@ def main():
                     break
             # os.system('cls')
             show_board(board)
-
