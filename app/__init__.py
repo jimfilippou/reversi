@@ -1,25 +1,27 @@
 from app.board import *
 from app.helpers import *
 import time
-import os
 
 board = initialize_board()
 
-# Letter to coordinate (ltc)
 
-
-def ltc(x): return ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].index(x) + 1
+def ltc(x):
+    """
+    Letter to coordinate function is used to transform a letter from upper X axis
+    to the corresponding value on the 8x8 grid.
+    :param x: The letter to search
+    :return: A number which corresponds to proper coordinate.
+    """
+    return ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].index(x) + 1
 
 
 def main():
-
     run = True
     counter = 4
     counter_human = 2
     counter_ai = 2
     player = who_plays_first()  # Αρχικοποίηση για το ποιός παίζει πρώτος.
     show_board(board)
-
     while run:
         if counter >= 64:
             print('game over!!!')
@@ -59,8 +61,8 @@ def main():
                 time.sleep(1)
                 for i in range(8):
                     for j in range(8):
-                        print(i+1, j+1)
-                        should_move = pickPos(i+1, j+1, board, 'ai')
+                        print(i + 1, j + 1)
+                        should_move = pickPos(i + 1, j + 1, board, 'ai')
                         if should_move:
                             player = 'human'
                             counter += 1
