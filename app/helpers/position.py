@@ -31,7 +31,7 @@ def pickPos(x, y, board, who):
                     try:
                         axis = board[pos][y] if s == 'up' or s == 'down' else board[x][pos]
                     except IndexError:
-                        continue
+                        break
                     if human and axis == "X" or not human and axis == "O":
                         # Player did a valid move, flip current tile
                         board[x][y] = "X" if human else "O"
@@ -75,8 +75,8 @@ def pickPos(x, y, board, who):
                         pos_x += 1
                     try:
                         tile = board[pos_x][pos_y]
-                    except IndexError as err:
-                        continue
+                    except IndexError:
+                        break
                     if human and tile == "X" or not human and tile == "O":
                         # ? Player did a valid move here
                         board[x][y] = "X" if human else "O"
