@@ -2,17 +2,16 @@ from app.board import show_board
 
 
 class Actions:
-    def __init__(self, x, y, moves):
+    def __init__(self, x, y, counter_ai, counter_human, moves):
         self.x = x
         self.y = y
         self.moves = moves
 
 
-def pickPos(x, y, board, who):
+def pickPos(x, y, board, counter_ai, counter_human, who):
 
-    actions = Actions(x, y, 0)
+    actions = Actions(x, y, counter_ai, counter_human, 0)
 
-    # ok = False
     human = who == 'human'
 
     if board[x][y] == "-":
@@ -37,7 +36,7 @@ def pickPos(x, y, board, who):
                         board[x][y] = "X" if human else "O"
                         actions.moves += 1
                         # Now flip tiles in between and return if at least one was flipped
-                        flip_tiles(x, y, board, human, s)
+                        flip_tiles(x, y, board, human, counter_ai, counter_human, s)
                     elif axis == "-":
                         break
 
@@ -80,7 +79,7 @@ def pickPos(x, y, board, who):
                     if human and tile == "X" or not human and tile == "O":
                         # ? Player did a valid move here
                         board[x][y] = "X" if human else "O"
-                        flip_tiles_diagonally(x, y, board, human, s)
+                        flip_tiles_diagonally(x, y, board, human, counter_ai, counter_human, s)
                         actions.moves += 1
                     elif tile == '-':
                         break  # ! break ?
@@ -88,7 +87,7 @@ def pickPos(x, y, board, who):
         return actions.moves > 0
 
 
-def flip_tiles_diagonally(x, y, board, human, s):
+def flip_tiles_diagonally(x, y, board, human, counter_ai, counter_human, s):
     response = False
     if s == 'ul':
         temp_y = y - 1
@@ -105,13 +104,19 @@ def flip_tiles_diagonally(x, y, board, human, s):
     condition = board[temp_x][temp_y]
     while (human and condition == "O") or (not human and condition == "X"):
         board[temp_x][temp_y] = "X" if human else "O"
+        if human :
+            counter_human += 1
+            counter_ai -= 1
+        elif not human :
+            counter_ai += 1
+            counter_human -= 1
         if not response:
             response = True
         condition = board[temp_x][temp_y]
     return response
 
 
-def flip_tiles(x, y, board, human, s):
+def flip_tiles(x, y, board, human, counter_ai, counter_human, s):
     response = False
     temp = x - 1 if s == 'up' else x + \
         1 if s == 'down' else y - 1 if s == 'left' else y + 1
@@ -121,6 +126,12 @@ def flip_tiles(x, y, board, human, s):
             board[temp][y] = "X" if human else "O"
         else:
             board[x][temp] = "X" if human else "O"
+        if human :
+            counter_human += 1
+            counter_ai -= 1
+        elif not human :
+            counter_ai += 1
+            counter_human -= 1
         temp = temp - 1 if s == 'up' or s == 'left' else temp + 1
         if not response:
             response = True

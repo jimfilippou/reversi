@@ -24,7 +24,7 @@ def main():
     show_board(board)
     while run:
         if counter >= 64:
-            print('game over!!!')
+            print('\ngame over!!!')
             if counter_human > counter_ai:
                 print('You win!!!')
             elif counter_human < counter_ai:
@@ -45,11 +45,12 @@ def main():
                     print('Please provide a proper coordinate.')
                     continue
 
-                should_move = pickPos(x, y, board, 'human')
+                should_move = pickPos(x, y, board, counter_ai, counter_human, 'human')
 
                 if should_move:
                     player = 'ai'
                     counter += 1
+                    counter_human += 1
                     # os.system('cls')
                     show_board(board)
                 else:
@@ -62,10 +63,11 @@ def main():
                 for i in range(8):
                     for j in range(8):
                         print(i + 1, j + 1)
-                        should_move = pickPos(i + 1, j + 1, board, 'ai')
+                        should_move = pickPos(i + 1, j + 1, board, counter_ai, counter_human, 'ai')
                         if should_move:
                             player = 'human'
                             counter += 1
+                            counter_ai += 1
                             done = True
                             break
                     if done:
