@@ -70,6 +70,11 @@ def main():
                             counter_ai += 1
                             done = True
                             break
+                        if i == 8 and j == 8 and not should_move:
+                            print("No posible moves!!! It's your turn!")
+                            player = "human"
+                            done = True
+                            break
                     if done:
                         break
                 # os.system('cls')
