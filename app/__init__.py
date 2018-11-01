@@ -16,57 +16,74 @@ def ltc(x):
     return ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].index(x) + 1
 
 
+def game_is_finished(pts):
+    return pts.total >= 64
+
+
+def show_winner(pts):
+    if pts.human > pts.ai:
+        print('Human won!')
+    elif pts.human < pts.ai:
+        print('AI won!')
+    else:
+        print('It\'s a tie!')
+
+
 def main():
-    run = True
+    """
+    The main loop of the game.
+    :return:
+    """
     points = Score(2, 2)
     player = who_plays_first()
     show_board(board)
-    while run:
-        if points.total >= 64:
-            print('\ngame over!!')
-            if points.human > points.ai:
-                print('You win!!!')
-            elif points.human < points.ai:
-                print('You lost!!!')
-            else:
-                print('Tied!!!')
+    while True:
+        if game_is_finished(points):
+            show_winner(points)
             break
-        else:
-            if player == 'human':
-                ans = input("\nWhere do you want to put your tile? [X,Y] ")
-                if ans == 'break':
-                    break
-                try:
-                    x = int(str(ans).split(',')[0])
-                    y = ltc(str(ans).split(',')[1])
-                except ValueError as err:
-                    print('Please provide a proper coordinate.')
-                    continue
+        if player == 'human':
+            ans = input("\nWhere do you want to put your tile? [X,Y] ")
+            if ans == 'break':
+                break
+            try:
+                x = int(str(ans).split(',')[0])
+                y = ltc(str(ans).split(',')[1])
+            except ValueError as err:
+                print('Please provide a proper coordinate.')
+                continue
 
-                actions = pick_pos(x, y, board, 'human')
+            actions = pick_pos(x, y, board, 'human')
 
-                if actions.moves > 0:
-                    player = 'ai'
-                    show_board(board)
-                else:
-                    print("\nYou can't put your tile here!Choose another position.")
-            else:
-                # AI move
-                done = False
-                print('\nThinking....')
-                time.sleep(1)
-                for i in range(8):
-                    for j in range(8):
-                        print(i + 1, j + 1)
-                        actions = pick_pos(i + 1, j + 1, board, 'ai')
-                        try:
-                            if actions.moves > 0:
-                                player = 'human'
-                                done = True
-                                break
-                        except AttributeError:
-                            continue
-                    if done:
-                        break
-                # os.system('cls')
+            if actions.moves > 0:
+                player = 'ai'
                 show_board(board)
+            else:
+                print("\nYou can't put your tile here!Choose another position.")
+        else:
+            # AI move
+            done = False
+            print('\nThinking....')
+            time.sleep(1)
+            for i in range(8):
+                for j in range(8):
+                    print(i + 1, j + 1)
+                    actions = pick_pos(i + 1, j + 1, board, 'ai')
+                    try:
+                        if i == 8 and j == 8 and not actions.moves > 0:
+                            print("No posible moves!!! It's your turn!")
+                            player = "human"
+                            done = True
+                            break
+                    except AttributeError:
+                        continue
+                    try:
+                        if actions.moves > 0:
+                            player = 'human'
+                            done = True
+                            break
+                    except AttributeError:
+                        continue
+                if done:
+                    break
+            # os.system('cls')
+            show_board(board)
