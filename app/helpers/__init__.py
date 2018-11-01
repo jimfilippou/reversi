@@ -1,4 +1,6 @@
-from .position import pickPos
+from .position import pick_pos
+from .score import Score
+
 
 def who_plays_first():
     """
@@ -10,4 +12,4 @@ def who_plays_first():
         ans = input("Do you want to play first? [Y/N] ")
         if str(ans).lower() == 'y' or str(ans).lower() == 'n':
             break
-    return 'human' if str(ans).lower() == 'y' else 'ai' 
+    return 'human' if str(ans).lower() == 'y' else 'ai'

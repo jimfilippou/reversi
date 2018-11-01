@@ -1,6 +1,7 @@
+import time
+
 from app.board import *
 from app.helpers import *
-import time
 
 board = initialize_board()
 
@@ -17,17 +18,15 @@ def ltc(x):
 
 def main():
     run = True
-    counter = 4
-    counter_human = 2
-    counter_ai = 2
-    player = who_plays_first()  # Αρχικοποίηση για το ποιός παίζει πρώτος.
+    points = Score(2, 2)
+    player = who_plays_first()
     show_board(board)
     while run:
-        if counter >= 64:
-            print('\ngame over!!!')
-            if counter_human > counter_ai:
+        if points.total >= 64:
+            print('\ngame over!!')
+            if points.human > points.ai:
                 print('You win!!!')
-            elif counter_human < counter_ai:
+            elif points.human < points.ai:
                 print('You lost!!!')
             else:
                 print('Tied!!!')
@@ -37,7 +36,6 @@ def main():
                 ans = input("\nWhere do you want to put your tile? [X,Y] ")
                 if ans == 'break':
                     break
-
                 try:
                     x = int(str(ans).split(',')[0])
                     y = ltc(str(ans).split(',')[1])
@@ -45,13 +43,10 @@ def main():
                     print('Please provide a proper coordinate.')
                     continue
 
-                should_move = pickPos(x, y, board, counter_ai, counter_human, 'human')
+                actions = pick_pos(x, y, board, 'human')
 
-                if should_move:
+                if actions.moves > 0:
                     player = 'ai'
-                    counter += 1
-                    counter_human += 1
-                    # os.system('cls')
                     show_board(board)
                 else:
                     print("\nYou can't put your tile here!Choose another position.")
@@ -63,13 +58,14 @@ def main():
                 for i in range(8):
                     for j in range(8):
                         print(i + 1, j + 1)
-                        should_move = pickPos(i + 1, j + 1, board, counter_ai, counter_human, 'ai')
-                        if should_move:
-                            player = 'human'
-                            counter += 1
-                            counter_ai += 1
-                            done = True
-                            break
+                        actions = pick_pos(i + 1, j + 1, board, 'ai')
+                        try:
+                            if actions.moves > 0:
+                                player = 'human'
+                                done = True
+                                break
+                        except AttributeError:
+                            continue
                     if done:
                         break
                 # os.system('cls')
