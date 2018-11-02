@@ -1,3 +1,4 @@
+import copy
 import time
 
 from app.board import *
@@ -29,6 +30,19 @@ def show_winner(pts):
         print('It\'s a tie!')
 
 
+def check_if_available_moves():
+    for i in range(8):
+        for j in range(8):
+            actions = pick_pos(i + 1, j + 1, copy.deepcopy(board), 'human')
+            try:
+                if actions.moves > 0:
+                    return True
+            except AttributeError:
+                continue
+
+    return False
+
+
 def main():
     """
     The main loop of the game.
@@ -48,7 +62,7 @@ def main():
             try:
                 x = int(str(ans).split(',')[0])
                 y = ltc(str(ans).split(',')[1])
-            except ValueError as err:
+            except ValueError:
                 print('Please provide a proper coordinate.')
                 continue
             actions = pick_pos(x, y, board, 'human')
