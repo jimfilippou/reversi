@@ -34,7 +34,7 @@ def main():
     The main loop of the game.
     :return:
     """
-    points = Score(2, 2)
+    points = Score(human=2, ai=2)
     player = who_plays_first()
     show_board(board)
     while True:
@@ -51,14 +51,18 @@ def main():
             except ValueError as err:
                 print('Please provide a proper coordinate.')
                 continue
-
             actions = pick_pos(x, y, board, 'human')
-
-            if actions.moves > 0:
-                player = 'ai'
-                show_board(board)
-            else:
-                print("\nYou can't put your tile here!Choose another position.")
+            try:
+                if actions.moves > 0:
+                    points.human = points.human + 1
+                    points.human = points.human + actions.flips
+                    points.ai = points.ai - actions.flips
+                    player = 'ai'
+                    show_board(board)
+                else:
+                    print("\nYou can't put your tile here!Choose another position.")
+            except AttributeError:
+                continue
         else:
             # AI move
             done = False
@@ -78,6 +82,9 @@ def main():
                         continue
                     try:
                         if actions.moves > 0:
+                            points.ai = points.ai + 1
+                            points.ai = points.ai + actions.flips
+                            points.human = points.human - actions.flips
                             player = 'human'
                             done = True
                             break
