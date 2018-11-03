@@ -5,6 +5,7 @@ from app.board import *
 from app.helpers import *
 
 board = initialize_board()
+points = Score(human=2, ai=2)
 
 
 def ltc(x):
@@ -30,7 +31,7 @@ def show_winner(pts):
         print('It\'s a tie!')
 
 
-def check_if_available_moves():
+def available_moves():
     for i in range(8):
         for j in range(8):
             actions = pick_pos(i + 1, j + 1, copy.deepcopy(board), 'human')
@@ -39,7 +40,6 @@ def check_if_available_moves():
                     return True
             except AttributeError:
                 continue
-
     return False
 
 
@@ -48,7 +48,6 @@ def main():
     The main loop of the game.
     :return:
     """
-    points = Score(human=2, ai=2)
     player = who_plays_first()
     show_board(board)
     while True:
@@ -56,9 +55,9 @@ def main():
             show_winner(points)
             break
         if player == 'human':
-            ans = input("\nWhere do you want to put your tile? [X,Y] ")
-            if ans == 'break':
+            if not available_moves():
                 break
+            ans = input("\nWhere do you want to put your tile? [X,Y] ")
             try:
                 x = int(str(ans).split(',')[0])
                 y = ltc(str(ans).split(',')[1])
@@ -68,9 +67,8 @@ def main():
             actions = pick_pos(x, y, board, 'human')
             try:
                 if actions.moves > 0:
-                    points.human = points.human + 1
-                    points.human = points.human + actions.flips
-                    points.ai = points.ai - actions.flips
+                    points.add_points('human', actions.flips + 1)
+                    points.sub_points('ai', actions.flips)
                     player = 'ai'
                     show_board(board)
                 else:
@@ -96,9 +94,8 @@ def main():
                         continue
                     try:
                         if actions.moves > 0:
-                            points.ai = points.ai + 1
-                            points.ai = points.ai + actions.flips
-                            points.human = points.human - actions.flips
+                            points.add_points('ai', actions.flips + 1)
+                            points.sub_points('human', actions.flips)
                             player = 'human'
                             done = True
                             break

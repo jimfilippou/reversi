@@ -29,3 +29,17 @@ class Score:
 
     def update_total(self):
         self._total = self._ai + self._human
+
+    def add_points(self, ply, pts):
+        if ply == 'human':
+            self._human += pts
+        else:
+            self._ai += pts
+        self.update_total()
+
+    def sub_points(self, ply, pts):
+        if ply == 'human':
+            self._human -= pts
+        else:
+            self._ai -= pts
+        self.update_total()
