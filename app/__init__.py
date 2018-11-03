@@ -1,4 +1,3 @@
-import copy
 import time
 
 from app.board import *
@@ -6,41 +5,6 @@ from app.helpers import *
 
 board = initialize_board()
 points = Score(human=2, ai=2)
-
-
-def ltc(x):
-    """
-    Letter to coordinate function is used to transform a letter from upper X axis
-    to the corresponding value on the 8x8 grid.
-    :param x: The letter to search
-    :return: A number which corresponds to proper coordinate.
-    """
-    return ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].index(x) + 1
-
-
-def game_is_finished(pts):
-    return pts.total >= 64
-
-
-def show_winner(pts):
-    if pts.human > pts.ai:
-        print('Human won!')
-    elif pts.human < pts.ai:
-        print('AI won!')
-    else:
-        print('It\'s a tie!')
-
-
-def available_moves():
-    for i in range(8):
-        for j in range(8):
-            actions = pick_pos(i + 1, j + 1, copy.deepcopy(board), 'human')
-            try:
-                if actions.moves > 0:
-                    return True
-            except AttributeError:
-                continue
-    return False
 
 
 def main():
