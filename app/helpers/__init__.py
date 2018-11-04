@@ -43,7 +43,7 @@ def show_winner(pts):
         print('It\'s a tie!')
 
 
-def available_moves():
+def available_moves(board):
     for i in range(8):
         for j in range(8):
             actions = pick_pos(i + 1, j + 1, copy.deepcopy(board), 'human')

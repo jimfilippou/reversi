@@ -19,7 +19,12 @@ def main():
             show_winner(points)
             break
         if player == 'human':
-            if not available_moves():
+            print("\nHuman's points:")
+            print(".")
+            print("\nAi's points:")
+            print(".")
+
+            if not available_moves(board):
                 break
             ans = input("\nWhere do you want to put your tile? [X,Y] ")
             try:
