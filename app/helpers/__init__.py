@@ -7,6 +7,11 @@ from .score import Score
 # All functions below are for generic use
 
 
+def ask_depth():
+    ans = input("Set minimax depth: ")
+    return int(ans)
+
+
 def who_plays_first():
     """
     Asks user if he/she wants to play first.
@@ -36,11 +41,11 @@ def game_is_finished(pts):
 
 def show_winner(pts):
     if pts.human > pts.ai:
-        print('Human won!')
+        print('\nHuman won!')
     elif pts.human < pts.ai:
-        print('AI won!')
+        print('\nAI won!')
     else:
-        print('It\'s a tie!')
+        print('\nIt\'s a tie!')
 
 
 def available_moves(board):

@@ -13,19 +13,20 @@ def main():
     :return:
     """
     player = who_plays_first()
+    depth = ask_depth()
+    print("\nHuman: %i" % points.human)
+    print("   AI: %i" % points.ai)
     show_board(board)
     while True:
         if game_is_finished(points):
             show_winner(points)
             break
         if player == 'human':
-            print("\nHuman's points:")
-            print(".")
-            print("\nAi's points:")
-            print(".")
-
             if not available_moves(board):
-                break
+                player = 'ai'
+                print("\nNot available moves!!!")
+                time.sleep(2)
+                continue
             ans = input("\nWhere do you want to put your tile? [X,Y] ")
             try:
                 x = int(str(ans).split(',')[0])
@@ -39,6 +40,8 @@ def main():
                     points.add_points('human', actions.flips + 1)
                     points.sub_points('ai', actions.flips)
                     player = 'ai'
+                    print("\nHuman: %i" % points.human)
+                    print("   AI: %i" % points.ai)
                     show_board(board)
                 else:
                     print("\nYou can't put your tile here!Choose another position.")
@@ -46,16 +49,15 @@ def main():
                 continue
         else:
             # AI move
-            done = False
             print('\nThinking....')
             time.sleep(1)
+            moves = []
             for i in range(8):
                 for j in range(8):
-                    print(i + 1, j + 1)
-                    actions = pick_pos(i + 1, j + 1, board, 'ai')
+                    actions = pick_pos(i + 1, j + 1, copy.deepcopy(board), 'ai')
                     try:
                         if i == 8 and j == 8 and not actions.moves > 0:
-                            print("No posible moves!!! It's your turn!")
+                            print("No possible moves!!! It's your turn!")
                             player = "human"
                             done = True
                             break
@@ -63,14 +65,8 @@ def main():
                         continue
                     try:
                         if actions.moves > 0:
-                            points.add_points('ai', actions.flips + 1)
-                            points.sub_points('human', actions.flips)
-                            player = 'human'
-                            done = True
-                            break
+                            moves.append(actions)
                     except AttributeError:
                         continue
-                if done:
-                    break
-            # os.system('cls')
+            player = 'human'
             show_board(board)
