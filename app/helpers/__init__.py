@@ -8,8 +8,10 @@ from .score import Score
 
 
 def ask_depth():
-    ans = input("Set minimax depth: ")
-    return int(ans)
+    while True:
+        ans = input("Set difficulty: \n1) Easy\n2) Normal\n3) Pro\n")
+        if int(ans) in [1, 2, 3]:
+            return [4, 8, 12][int(ans) - 1]
 
 
 def who_plays_first():
@@ -58,3 +60,16 @@ def available_moves(board):
             except AttributeError:
                 continue
     return False
+
+
+def valid_move(_board, x, y, player):
+    if x < 0 or x > 8 - 1 or y < 0 or y > 8 - 1:
+        return False
+    move = pick_pos(x, y, copy.deepcopy(_board), player)
+    try:
+        if move.moves > 0:
+            return True
+        else:
+            return False
+    except AttributeError:
+        return False

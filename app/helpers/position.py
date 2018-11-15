@@ -2,17 +2,18 @@ from .flip import flip_tiles, flip_tiles_diagonally
 
 
 class Actions:
-    def __init__(self, moves, flips):
+    def __init__(self, moves, flips, x, y):
         self.moves = moves
         self.flips = flips
+        self.x = x
+        self.y = y
 
 
 def pick_pos(x, y, board, who):
-    actions = Actions(0, 0)
+    actions = Actions(0, 0, x, y)
+    actions.board = board
     human = who == 'human'
-
     if board[x][y] == "-":
-
         # Look up down left and right for moves and execute moves
         for s in ['up', 'down', 'left', 'right']:
             pos = x - 1 if s == 'up' else x + 1 if s == 'down' else y - 1 if s == 'left' else y + 1
@@ -34,7 +35,6 @@ def pick_pos(x, y, board, who):
                         actions.flips = flip_tiles(x, y, board, human, s)
                     elif axis == "-":
                         break
-
         #  Look NorthWest SouthWest NorthEast SouthEast for moves and execute moves
         for s in ['ul', 'ur', 'dl', 'dr']:
             pos_y = y - 1 if s == 'ul' or s == 'dl' else y + 1
