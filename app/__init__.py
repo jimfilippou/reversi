@@ -1,5 +1,6 @@
 import time
 
+from app.ai import *
 from app.board import *
 from app.helpers import *
 
@@ -8,33 +9,6 @@ points = Score(human=2, ai=2)
 depth = ask_depth()
 min_eval = -1
 max_eval = 101  # 8 * 8 + 4 * 8 + 4 + 1
-
-
-# if no valid move(s) possible then True
-def terminal_node(b, player):
-    for y in range(8):
-        for x in range(8):
-            if valid_move(b, x, y, player):
-                return False
-    return True
-
-
-def map_to_tile(ply):
-    return 'O' if ply == 'ai' else 'X'
-
-
-def snapshot_board(b, player):
-    total = 0
-    for y in range(8):
-        for x in range(8):
-            if b[y][x] == map_to_tile(player):
-                if (x == 0 or x == 7) and (y == 0 or y == 7):
-                    total += 4  # corner: woo!
-                elif (x == 0 or x == 7) or (y == 0 or y == 7):
-                    total += 2  # side: cool!
-                else:
-                    total += 1  # Anywhere else: meh...
-    return total
 
 
 def main():
@@ -76,10 +50,9 @@ def main():
             # AI move
             print('\nThinking....')
             move = best_move(board, 'ai')
-            print(move)
-            # pick_pos(move.x, move.y, board, 'ai')
-            # player = 'human'
-            # show_board(board)
+            pick_pos(move[0], move[1], board, 'ai')
+            player = 'human'
+            show_board(board)
 
 
 def best_move(b, player):
@@ -91,7 +64,7 @@ def best_move(b, player):
             if valid_move(b, x, y, player):
                 try:
                     pick_pos(x, y, copy.deepcopy(b), player)
-                    pts = mini_max_a_b(b, player, depth, min_eval, max_eval, True)
+                    pts = minimax(b, player, depth, min_eval, max_eval, True)
                     if pts > max_points:
                         max_points = pts
                         mx = x
@@ -101,17 +74,17 @@ def best_move(b, player):
     return mx, my
 
 
-def mini_max_a_b(boar, player, depth, alpha, beta, maximizingPlayer):
+def minimax(boar, player, depth, alpha, beta, maximizing):
     if depth == 0 or terminal_node(boar, player):
         return snapshot_board(boar, player)
-    if maximizingPlayer:
+    if maximizing:
         v = min_eval
         for y in range(8):
             for x in range(8):
                 if valid_move(boar, x, y, player):
                     move = pick_pos(x=x, y=y, board=copy.deepcopy(boar), who=player)
                     try:
-                        v = max(v, mini_max_a_b(move.board, player, depth - 1, alpha, beta, False))
+                        v = max(v, minimax(move.board, player, depth - 1, alpha, beta, False))
                         alpha = max(alpha, v)
                         if beta <= alpha:
                             break  # beta cut-off
@@ -126,7 +99,7 @@ def mini_max_a_b(boar, player, depth, alpha, beta, maximizingPlayer):
                 if valid_move(boar, x, y, player):
                     move = pick_pos(board=copy.deepcopy(boar), x=x, y=y, who=player)
                     try:
-                        v = min(v, mini_max_a_b(move.board, player, depth - 1, alpha, beta, True))
+                        v = min(v, minimax(move.board, player, depth - 1, alpha, beta, True))
                         beta = min(beta, v)
                         if beta <= alpha:
                             break  # alpha cut-off
