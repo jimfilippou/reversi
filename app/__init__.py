@@ -50,7 +50,11 @@ def main():
             # AI move
             print('\nThinking....')
             move = best_move(board, 'ai')
-            pick_pos(move[0], move[1], board, 'ai')
+            ndl = pick_pos(move[0], move[1], board, 'ai')
+            points.add_points('ai', ndl.flips + 1)
+            points.sub_points('human', ndl.flips)
+            print("\nHuman: %i" % points.human)
+            print("   AI: %i" % points.ai)
             player = 'human'
             show_board(board)
 
