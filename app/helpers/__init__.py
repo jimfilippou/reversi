@@ -44,10 +44,16 @@ def game_is_finished(pts):
 def show_winner(pts):
     if pts.human > pts.ai:
         print('\nHuman won!')
+        print("\nHuman: %i" % pts.human)
+        print("   AI: %i" % pts.ai)
     elif pts.human < pts.ai:
         print('\nAI won!')
+        print("\nHuman: %i" % pts.human)
+        print("   AI: %i" % pts.ai)
     else:
         print('\nIt\'s a tie!')
+        print("\nHuman: %i" % pts.human)
+        print("   AI: %i" % pts.ai)
 
 
 def available_moves(board):
