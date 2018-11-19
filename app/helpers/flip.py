@@ -1,12 +1,12 @@
 def flip_tiles_diagonally(x, y, board, human, s):
     """
     Flips tiles on the board diagonally starting from X,Y
-    :param x:
-    :param y:
-    :param board:
-    :param human:
-    :param s:
-    :return:
+    :param x: X coordinate on the grid
+    :param y: Y coordinate on the grid
+    :param board: Board to flip tiles
+    :param human: Who flipped the tiles
+    :param s: What direction should the function follow
+    :return: Returns how many tile flips actually happened
     """
     flips = 0
     temp_y = y - 1 if s == 'ul' or s == 'dl' else y + 1
@@ -26,7 +26,7 @@ def flip_tiles(x, y, board, human, s):
     :param y: Y coordinate
     :param board: The board array
     :param human: Indicates if current player is human or not
-    :param s: Directions provided as strings
+    :param s: What direction should the function follow
     :return: How many tiles were flipped
     """
     flipped = 0

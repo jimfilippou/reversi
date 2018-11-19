@@ -1,4 +1,7 @@
 class Score:
+    """
+    The score class, nothing more than setters and getters for score calculations.
+    """
 
     def __init__(self, human, ai):
         self._human = human

@@ -2,6 +2,10 @@ from .flip import flip_tiles, flip_tiles_diagonally
 
 
 class Actions:
+    """
+    The action object returned from pick_pos function.
+    When an action happens, this object is returned with proper information.
+    """
     def __init__(self, moves, flips, x, y):
         self.moves = moves
         self.flips = flips
@@ -10,6 +14,14 @@ class Actions:
 
 
 def pick_pos(x, y, board, who):
+    """
+    Does the move on given x and y. Searches all 8 directions and updates the actions accordingly.
+    :param x: X coordinate on the grid
+    :param y: Y coordinate on the grid
+    :param board: Board to play on
+    :param who: Who plays during this function call
+    :return: Returns an object of type Actions which contain the actions happened across the loops.
+    """
     actions = Actions(0, 0, x, y)
     actions.board = board
     human = who == 'human'

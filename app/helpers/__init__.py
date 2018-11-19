@@ -4,14 +4,18 @@ from .position import pick_pos
 from .score import Score
 
 
-# All functions below are for generic use
-
-
 def ask_depth():
+    """
+    Ask user for difficulty and maps the response to the following depths
+    Easy  : 2 Depth
+    Normal: 4 Depth
+    Pro   : 6 Depth
+    :return: The actual depth of the minimax tree.
+    """
     while True:
         ans = input("Set difficulty: \n1) Easy\n2) Normal\n3) Pro\n")
         if int(ans) in [1, 2, 3]:
-            return [4, 8, 12][int(ans) - 1]
+            return [2, 4, 6][int(ans) - 1]
 
 
 def who_plays_first():
@@ -38,10 +42,20 @@ def ltc(x):
 
 
 def game_is_finished(pts):
+    """
+    Indicates if the game state is finished.
+    :param pts: Points object to check
+    :return: Returns true if the game is finished.
+    """
     return pts.total >= 64
 
 
 def show_winner(pts):
+    """
+    Shows the winner based on points
+    :param pts: A points object to compare
+    :return: Returns nothing (void)
+    """
     if pts.human > pts.ai:
         print('\nHuman won!')
         print("\nHuman: %i" % pts.human)
@@ -69,6 +83,14 @@ def available_moves(board):
 
 
 def valid_move(_board, x, y, player):
+    """
+    Checks given X and Y on the given board to see if this move is actually valid.
+    :param _board: The board to check for valid move.
+    :param x: X coordinate on the grid
+    :param y: Y coordinate on the grid
+    :param player: The player to check the valid move on
+    :return: Returns True if the given X and Y result in a valid move.
+    """
     if x < 0 or x > 8 - 1 or y < 0 or y > 8 - 1:
         return False
     move = pick_pos(x, y, copy.deepcopy(_board), player)

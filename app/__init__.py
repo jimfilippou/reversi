@@ -4,11 +4,20 @@ from app.ai import *
 from app.board import *
 from app.helpers import *
 
+# Initialize 8x8 board
 board = initialize_board()
+
+# Initialize score
 points = Score(human=2, ai=2)
+
+# Initialize minimax depth
 depth = ask_depth()
+
+# Minimum evaluation for minimax
 min_eval = -1
-max_eval = 101  # 8 * 8 + 4 * 8 + 4 + 1
+
+# Max evaluation for minimax.
+max_eval = 101
 
 
 def main():
@@ -60,6 +69,14 @@ def main():
 
 
 def best_move(b, player):
+    """
+    Initially starts with the worst points which is 0, and while looping through the 8x8 grid,
+    it compares the current points to the move points. If there is a better move, then pick that move
+    and continue. When the function finds the best move, it returns the coordinates of that move.
+    :param b: Board
+    :param player: Player
+    :return: (x, y): Returns a tuple that indicates the best move's coordinates.
+    """
     max_points = 0
     mx = -1
     my = -1
@@ -79,6 +96,16 @@ def best_move(b, player):
 
 
 def minimax(boar, player, depth, alpha, beta, maximizing):
+    """
+    The minimax implementation using a/b pruning.
+    :param boar: The board passed
+    :param player: The current player
+    :param depth: The max depth of the algorithm
+    :param alpha: Alpha
+    :param beta: Beta
+    :param maximizing: True when maximizing, false when minimizing
+    :return:
+    """
     if depth == 0 or terminal_node(boar, player):
         return snapshot_board(boar, player)
     if maximizing:
@@ -96,7 +123,7 @@ def minimax(boar, player, depth, alpha, beta, maximizing):
                         continue
 
         return v
-    else:  # minimizingPlayer
+    else:
         v = max_eval
         for y in range(8):
             for x in range(8):
